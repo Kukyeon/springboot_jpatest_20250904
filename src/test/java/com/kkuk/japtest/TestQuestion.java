@@ -116,5 +116,10 @@ public class TestQuestion {
 			System.out.println(questiontbl2.getQtitle());
 			System.out.println("----------------");
 		}
+		
+		//직접 쓴 sql문 (@Query 사용) 으로 조회
+		Questiontbl questiontb = questionRepository.findQuestionByQnum(5L);
+		System.out.println(questiontb.getQnum());
+		System.out.println(questiontb.getQtitle());
 	}
 }
