@@ -121,5 +121,7 @@ public class TestQuestion {
 		Questiontbl questiontb = questionRepository.findQuestionByQnum(5L);
 		System.out.println(questiontb.getQnum());
 		System.out.println(questiontb.getQtitle());
+		
+		questionRepository.ex
 	}
 }
