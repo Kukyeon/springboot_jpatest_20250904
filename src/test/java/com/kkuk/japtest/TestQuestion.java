@@ -1,19 +1,24 @@
 package com.kkuk.japtest;
 
+import java.beans.Transient;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.Rollback;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.kkuk.japtest.dto.QuestionDto;
 import com.kkuk.japtest.entity.Questiontbl;
 import com.kkuk.japtest.repository.QuestionRepository;
 
 @SpringBootTest
+
 public class TestQuestion {
 
 	@Autowired
@@ -82,46 +87,81 @@ public class TestQuestion {
 //		}
 //	}
 	
+//	@Test
+//	@DisplayName("특정 질문 검색")
+//	public void searchQuestionByField() {
+//		Optional<Questiontbl> questionOption = questionRepository.findById(5L);
+//		//select * from jpaquestiontbl where qnum=4
+//		
+//		//기본키로 검색했을때 레코드가 1개 또는 존재하지않는경우 발생
+//		//Option<Questiontbl> 형태로 반환타입을 정해야함
+//		//isPresent() 를 활용하면 Option<Questiontbl> 내에 객체의 존재여부를 알수있음
+//		if(questionOption.isPresent()) { // ture 일시 해당 기본키를 가진 레코드가 존재함->조회가능
+//			Questiontbl question = questionOption.get(); //해당 기본키를 가진 entity(레코드)가 반환
+//			System.out.println(question.getQnum());
+//			System.out.println(question.getQtitle());
+//		}else {// 해당 기본키를 가진 레코드가 존재하지않음 -> 조회실패
+//			System.out.println("검색실패");
+//		}
+//		
+//		//select * from questiontbl where qnum=1 and qtitle=홍길동
+//		Questiontbl questiontbl = questionRepository.findByQnumAndQtitle(1L, "홍길동");
+//		
+//		//제목이 정확히 일치하는 조건으로 검색
+//		List<Questiontbl> questions = questionRepository.findAllByQtitle("홍길동");
+//		
+//		for(Questiontbl questio : questions) {
+//			System.out.println(questio.getQtitle());
+//		}
+//		
+//		//질문제목에 특정문자가 들어있으면 찾는 조건으로 조회 -> like
+//		List<Questiontbl> likeQuestion = questionRepository.findAllByQtitleLikeOrderByQdateDesc("%질문%");
+//		for(Questiontbl questiontbl2 : likeQuestion) {
+//			System.out.println(questiontbl2.getQnum());
+//			System.out.println(questiontbl2.getQtitle());
+//			System.out.println("----------------");
+//		}
+//		
+//		//직접 쓴 sql문 (@Query 사용) 으로 조회
+//		Questiontbl questiontb = questionRepository.findQuestionByQnum(5L);
+//		System.out.println(questiontb.getQnum());
+//		System.out.println(questiontb.getQtitle());
+//		
+//	
+//	}
+	
+//	@Test
+//	@DisplayName("특정 질문 내용 업데이트")
+//	public void updateQuestion() {
+//		int updateResult = questionRepository.updateQcontentByQnum("질문을 변경하였습니다.", 5L);
+//		
+//		Optional<Questiontbl> questionOptional = questionRepository.findById(5L);
+//		
+//		if(questionOptional.isPresent()) {
+//			Questiontbl questiontbl = questionOptional.get();
+//			System.out.println(questiontbl.getQnum());
+//			System.out.println(questiontbl.getQcontent());
+//		}else {
+//			System.out.println("질문 조회 실패");
+//		}
+//	
+//	}
+		
 	@Test
-	@DisplayName("특정 질문 검색")
-	public void searchQuestionByField() {
-		Optional<Questiontbl> questionOption = questionRepository.findById(5L);
-		//select * from jpaquestiontbl where qnum=4
-		
-		//기본키로 검색했을때 레코드가 1개 또는 존재하지않는경우 발생
-		//Option<Questiontbl> 형태로 반환타입을 정해야함
-		//isPresent() 를 활용하면 Option<Questiontbl> 내에 객체의 존재여부를 알수있음
-		if(questionOption.isPresent()) { // ture 일시 해당 기본키를 가진 레코드가 존재함->조회가능
-			Questiontbl question = questionOption.get(); //해당 기본키를 가진 entity(레코드)가 반환
-			System.out.println(question.getQnum());
-			System.out.println(question.getQtitle());
-		}else {// 해당 기본키를 가진 레코드가 존재하지않음 -> 조회실패
-			System.out.println("검색실패");
-		}
-		
-		//select * from questiontbl where qnum=1 and qtitle=홍길동
-		Questiontbl questiontbl = questionRepository.findByQnumAndQtitle(1L, "홍길동");
-		
-		//제목이 정확히 일치하는 조건으로 검색
-		List<Questiontbl> questions = questionRepository.findAllByQtitle("홍길동");
-		
-		for(Questiontbl questio : questions) {
-			System.out.println(questio.getQtitle());
-		}
-		
-		//질문제목에 특정문자가 들어있으면 찾는 조건으로 조회 -> like
-		List<Questiontbl> likeQuestion = questionRepository.findAllByQtitleLikeOrderByQdateDesc("%질문%");
-		for(Questiontbl questiontbl2 : likeQuestion) {
-			System.out.println(questiontbl2.getQnum());
-			System.out.println(questiontbl2.getQtitle());
-			System.out.println("----------------");
-		}
-		
-		//직접 쓴 sql문 (@Query 사용) 으로 조회
-		Questiontbl questiontb = questionRepository.findQuestionByQnum(5L);
-		System.out.println(questiontb.getQnum());
-		System.out.println(questiontb.getQtitle());
-		
-		questionRepository.ex
+	@DisplayName("JPA방법의 업데이트")
+	@Transactional
+	@Rollback(false) // 실제 디비에 반영
+	public void updateJpaQuestion() {
+	 	Optional<Questiontbl> qOptional = questionRepository.findById(5L);
+	 	Questiontbl questiontbl = qOptional.get();
+	 	
+	 	System.out.println(questiontbl.getQnum());
+	 	System.out.println(questiontbl.getQcontent());
+	 	
+	 	questiontbl.setQcontent("질문내용수저어어어어어엉"); //qcontent 업데이트(수정)
+	 	Optional<Questiontbl> qOptional2 = questionRepository.findById(5L);
+	 	Questiontbl questiontbl2 = qOptional2.get();
+	 	System.out.println(questiontbl2.getQnum());
+	 	System.out.println(questiontbl2.getQcontent());
 	}
 }

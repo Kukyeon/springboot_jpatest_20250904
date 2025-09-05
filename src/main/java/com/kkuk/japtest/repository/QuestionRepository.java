@@ -3,6 +3,7 @@ package com.kkuk.japtest.repository;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
@@ -45,5 +46,13 @@ public interface QuestionRepository extends JpaRepository<Questiontbl, Long>{ //
 	//글 번호가 특정 값보다 큰 질문들만 조회 
 	public List<Questiontbl> findByQnumGreaterThanEqual(Long qnum);
 
-	
+	//질문 내용 업데이트
+	@Modifying
+	@Transactional
+	@Query("UPDATE Questiontbl q SET q.qcontent = :qcontent WHERE q.qnum = :qnum ")
+	public int updateQcontentByQnum(@Param("qcontent") String qcontent, @Param("qnum") Long qnum);
+
+	@Modifying
+	@Query(value = "UPDATE Question SET qcontent = :qcontent WHERE qnum = :qnum", nativeQuery = true)
+	public int updateNativeQcontentByQnum(@Param("qcontent") String qcontent, @Param("qnum")Long qnum);
 }
